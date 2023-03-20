@@ -7,6 +7,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+
 using Namotion.Reflection;
 using NJsonSchema;
 using NJsonSchema.Generation;
@@ -62,18 +63,7 @@ namespace NSwag.Generation
             ContextualType contextualType, bool isNullable,
             JsonSchemaResolver schemaResolver, Action<TSchemaType, JsonSchema> transformation = null)
         {
-            if (contextualType.TypeName == "Task`1")
-            {
-                contextualType = contextualType.OriginalGenericArguments[0];
-            }
-            else if (contextualType.TypeName == "JsonResult`1")
-            {
-                contextualType = contextualType.OriginalGenericArguments[0];
-            }
-            else if (contextualType.TypeName == "ActionResult`1")
-            {
-                contextualType = contextualType.OriginalGenericArguments[0];
-            }
+            GenericResultWrapperTypes.RemoveGenericWrapperTypes (ref contextualType,t=>t.TypeName,t=>t.OriginalGenericArguments[0]);
 
             if (IsFileResponse(contextualType))
             {
