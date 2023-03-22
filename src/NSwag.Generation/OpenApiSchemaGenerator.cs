@@ -7,7 +7,6 @@
 //-----------------------------------------------------------------------
 
 using System;
-
 using Namotion.Reflection;
 using NJsonSchema;
 using NJsonSchema.Generation;
@@ -52,14 +51,22 @@ namespace NSwag.Generation
             }
         }
 
-        /// <summary>Generetes a schema directly or referenced for the requested schema type; also adds nullability if required.</summary>
-        /// <typeparam name="TSchemaType">The resulted schema type which may reference the actual schema.</typeparam>
-        /// <param name="contextualType">The type of the schema to generate.</param>
-        /// <param name="isNullable">Specifies whether the property, parameter or requested schema type is nullable.</param>
-        /// <param name="schemaResolver">The schema resolver.</param>
-        /// <param name="transformation">An action to transform the resulting schema (e.g. property or parameter) before the type of reference is determined (with $ref or allOf/oneOf).</param>
-        /// <returns>The requested schema object.</returns>
-        public override TSchemaType GenerateWithReferenceAndNullability<TSchemaType>(
+		private readonly static String[] WrapperTypeNames = 
+        {
+            "Task`1",
+            "ValueTask`1",
+			"JsonResult`1",
+			"ActionResult`1"
+		};
+
+		/// <summary>Generetes a schema directly or referenced for the requested schema type; also adds nullability if required.</summary>
+		/// <typeparam name="TSchemaType">The resulted schema type which may reference the actual schema.</typeparam>
+		/// <param name="contextualType">The type of the schema to generate.</param>
+		/// <param name="isNullable">Specifies whether the property, parameter or requested schema type is nullable.</param>
+		/// <param name="schemaResolver">The schema resolver.</param>
+		/// <param name="transformation">An action to transform the resulting schema (e.g. property or parameter) before the type of reference is determined (with $ref or allOf/oneOf).</param>
+		/// <returns>The requested schema object.</returns>
+		public override TSchemaType GenerateWithReferenceAndNullability<TSchemaType>(
             ContextualType contextualType, bool isNullable,
             JsonSchemaResolver schemaResolver, Action<TSchemaType, JsonSchema> transformation = null)
         {
